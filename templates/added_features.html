@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Features</title>
+    <style>
+    html {
+      min-height: 100%;
+    }
+    body {
+      margin: 0px;
+      min-height: 100%;
+      width: 100%;
+      height: 100%;
+      /* background-image: linear-gradient(to right bottom, #250518, #30122a, #391e3e, #3e2c54, #3e3b6a, #384d80, #2a5f95, #0072a7, #008bb9, #00a4c4, #00bcc8, #00d4c6); */
+      background-image: linear-gradient(to right bottom, #5f0b3d, #99167e, #6e247c, #6b38a9, #3d388f, #1e4094, #2969aa, #10648c, #056585, #349fb4, #2c8e94, #24c7bc);
+      background-repeat: no-repeat;
+    }
+   /* header {
+      background-color: #0073b7;
+      color: #ffffff;
+      padding: 20px 0;
+      border-bottom: 3px solid #e74c3c;
+    } */
+
+    h1 {
+      font-family: Roboto, sans-serif;
+      font-size: 36px;
+      text-align: left;
+      text-shadow: 0 0 2px #000000;
+      color: #e8efee;
+    }
+
+        .container {
+      width: auto;
+      padding: 30px;
+      display: block;
+      text-align: center;
+    }
+    .container h2, .container li {
+        color: white;
+    }
+
+        /* #newsletter {
+          background-color: white;
+          border: 1px solid #0073b7;
+          border-radius: 5px;
+          padding: 20px;
+        } */
+
+        input[type="text"],
+    input[type="submit"] {
+      font-family: Roboto, sans-serif;
+      font-size: 18px;
+      border: 0.5px solid #d1dadf;
+      border-radius: 3px;
+      padding: 10px;
+      text-shadow: 0 0 0.5px #000000;
+    }
+
+    input[type="submit"] {
+      background-color: #310756;
+      color: white;
+      border: 1px solid #bccdd7;
+      box-shadow: 0 0 5px #f4e8e8;
+    }
+
+
+        footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+
+    }
+    footer h2 {
+      color: white;
+      text-align: center;
+      bottom: 0;
+    }
+
+    /* .card {
+      display: flex;
+      align-items: center;
+      height: 140px;
+      border: 1px solid #0073b7;
+      border-radius: 5px;
+      background-color: #A6D5BF;
+    } */
+
+    /* .card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-right: 20px;
+    } */
+
+    .card h2 {
+      color: #fbfffe;
+      padding-left: 5px;
+      font-size: 20px;
+    }
+
+    .img-container {
+      margin: auto;
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .img-container img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      /* background-image: linear-gradient(to right, #5d817e, #0f98b7); */
+      background-image: radial-gradient(#38E0E5, #13564f);
+    }
+
+    .img-container h1 {
+      padding-left: 20px;
+      text-align: center;
+    }
+
+    #input_field {
+      color: white;
+    }
+    .submission {
+        background-color: #310756;
+      color: white;
+      padding: 10px;
+      border: 1px solid #bccdd7;
+      box-shadow: 0 0 5px #f4e8e8;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <div class="img-container">
+                    <img src="static/PhishOracle_Logo.png" alt="Phishing Attack" />
+                    <h1>PhishOracle: Phishing Webpage Generator</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Selected Features:</h2>
+        <ul>
+            {% for feature in features %}
+                <li>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Add a button to trigger the file download -->
+    <div class="container">
+        <form method="POST" action="/download">
+            <input type="hidden" name="filename" value="legitimate_file.html">
+            <button class="submission" type="submit">Download HTML</button>
+        </form>
+    </div>
+
+
+    <footer>
+        <h2>PhishOracle Web App, 2023</h2>
+    </footer>
+</body>
+</html>
