@@ -42,7 +42,7 @@ def download_file():
     filename = request.form.get('filename')
 
     # Define the local path to the HTML file
-    phishing_folder_path = "E:\\Complete_Python\\_PhishOracle_Webapp\\Phishing_Webpage\\" + filename
+    phishing_folder_path = "E:\\PhishOracle_Experiment_Complete\\PhishOracle_Web_App\\Phishing_Webpage\\" + filename
 
     # Send the file as a downloadable response
     return send_file(phishing_folder_path, as_attachment=True)
