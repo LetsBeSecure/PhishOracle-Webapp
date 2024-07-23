@@ -21,8 +21,8 @@ In this function, we create an anchor tag with empty content
 '''
 
 csv_file = 'legitimate_urls_with_index.csv'
-phishing_folder_path = "PATH_TO_SAVE_PHISHING_WEBPAGE"
-legitimate_folder_path = "PATH_TO_SAVE_LEGIIMATE_FOLDER"
+phishing_folder_path = "E:\\PhishOracle_Experiment_Complete\\PhishOracle_Web_App\\Phishing_Webpage\\"
+legitimate_folder_path = "E:\\PhishOracle_Experiment_Complete\\PhishOracle_Web_App\\"
 
 
 def function_1(target_file, obtained_soup_here):
@@ -120,6 +120,7 @@ def function_2(target_file):
 In this feature we find and replace the domain name with look alike characters
 '''
 
+
 # Function to replace all characters in a domain to its look alike
 def replace_all_characters(text, replacements):
     return ''.join(random.choice(replacements[char]) if char in replacements else char for char in text)
@@ -151,7 +152,7 @@ def function_3(target_file, obtained_soup_here):
     print("Adding feature look alike domain name")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     f3_soup = obtained_soup_here
 
     # Define the look-alike characters
@@ -190,7 +191,7 @@ def function_4(target_file, obtained_soup_here):
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     f4_soup = obtained_soup_here
 
     for a_tag in f4_soup.find_all('a', href=True):
@@ -219,7 +220,7 @@ def function_5(target_file, obtained_soup_here):
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     f5_soup = obtained_soup_here
 
     for a_tag in f5_soup.find_all('a', href=True):
@@ -244,6 +245,7 @@ def function_5(target_file, obtained_soup_here):
 =======================================    PHASE 3 (FUNCTION 6) BEGINS HERE  =======================================
 In this feature we replace the white spaces between texts with a number from 0 to 9 and make it transparent
 '''
+
 
 # Function to replace white spaces with a number inside span elements
 def replace_whitespace_with_number(tag, f6_soup_cloned):
@@ -302,7 +304,7 @@ def function_7(target_file, obtained_soup_here):
 
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     f7_soup = obtained_soup_here
 
     for form_tag in f7_soup.find_all('form'):
@@ -366,6 +368,8 @@ def function_7(target_file, obtained_soup_here):
 =======================================    PHASE 3 (FUNCTION 8) BEGINS HERE  =======================================
 In this feature we disable other login buttons, except the one with the submit button of form
 '''
+
+
 # Function to disable an element
 def disable_element(element):
     element['onclick'] = 'return false;'
@@ -376,7 +380,7 @@ def function_8(target_file, obtained_soup_here):
     print('Disabling other login buttons')
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-   
+
     f8_soup = obtained_soup_here
 
     # Define the list of keywords to check in the text content
@@ -542,7 +546,7 @@ def function_10(target_file, obtained_soup_here):
     print("Adding feature to use pop-up login on various anchor tags")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     # Load HTML content from a file or obtained from previous steps
     f10_soup = obtained_soup_here
 
@@ -643,7 +647,7 @@ def function_11(target_file, obtained_soup_here):
     print("Add feature iframe containing form and save credentials")
     write_file = phishing_folder_path
     write_file_name = os.path.join(write_file, str(target_file))
-    
+
     # Load HTML content from a file or obtained from previous steps
     f11_soup = obtained_soup_here
 
@@ -783,7 +787,7 @@ def function_12(target_file, obtained_soup_here):
 
     for i, text in enumerate(div_texts):
         anchor_tag = f12_soup.new_tag("a", **{"href": "#", "class": f"new-div-{i}", "onclick": "showPopup()",
-                                          "style": "display: block; margin-bottom: 10px;"})
+                                              "style": "display: block; margin-bottom: 10px;"})
         anchor_tag.string = text
         appealing_section.append(anchor_tag)
 
@@ -910,6 +914,7 @@ def function_12(target_file, obtained_soup_here):
 In this feature we add body opacity to the webpage to make it quite transparent
 '''
 
+
 def function_13(target_file, obtained_soup_here):
     print("Adding feature we add body opacity")
     write_file = "\\xampp\\htdocs\\phishingTool\\PhishingSites\\"
@@ -1031,18 +1036,14 @@ def function_15(target_file, obtained_soup_here):
 ========================================    PHASE 3 (FUNCTION 15) ENDS HERE  ========================================
 '''
 
-
 # one_out_of_five = [function_1, function_3, function_5, function_8, function_10]
 # all_functions = {'a_href_status_ff': random.choice(one_out_of_five), '_form_': function_8,
-#                  'a_dis_button': function_11, 'h1_text': function_17,
-#                  'h2_text': function_17, 'p_text': function_17,
-#                  'logo_img': function_18}
-
-# function_list = [function_3, function_4, function_5, function_6, function_7, function_9, function_10,
-#                  function_16, function_19, function_20]
+#                  'a_dis_button': function_11,}
+#
+# function_list = [function_3, function_4, function_5, function_6, function_7, function_9, function_10]
 # function_list_names = ['dummy_comments', 'dummy_div', 'dummy_script', 'dummy_link', 'body_opacity', 'dummy_img',
 #                        'dummy_anchor', 'border_styling', 'change_favicon', 'iFrame']
-
+#
 # function_list_dictionary = {'a_href_status_ff': random.choice(['function_1', 'function_14', 'function_15']),
 #                             'dummy_comments': 'function_3', 'dummy_div': 'function_4', 'dummy_script': 'function_5',
 #                             'dummy_link': 'function_6', 'body_opacity': 'function_7', '_form_': 'function_8',
@@ -1050,13 +1051,18 @@ def function_15(target_file, obtained_soup_here):
 #                             'border_styling': 'function_16', 'p_text': 'function_17', 'logo_img': 'function_18',
 #                             'change_favicon': 'function_19', 'iFrame': 'function_20'}
 
-one_out_of_five_a = [function_1, function_3, function_5, function_8, function_10]
-all_functions = {'a_href_1': random.choice(one_out_of_five_a), 'a_href_2': function_4, 'form_11': function_7, 'form_2': function_9, 'form_3': function_11,
-                'form_4': function_12, 'p_h_span_1': function_6, 'p_h_span_2': function_14, 'body': function_13, 'img_svg': function_15}
-function_list_dictionary = {'a_href_1': random.choice('function_1', 'function_3', 'function_5', 'function_8', 'function_10'), 
-                            'a_href_2': 'function_4', 'form_1': 'function_7', 'form_2': 'function_9', 'form_3': 'function_11',
-                            'form_4': 'function_12', 'p_h_span_1': 'function_6', 'p_h_span_2': 'function_14', 'body': 'function_13',
-                            'img_svg': 'function_15'}
+one_out_of_five = [function_1, function_3, function_5, function_8, function_10]
+all_functions = {'a_href_1': random.choice(one_out_of_five), 'a_href_2': function_4, 'form_1': function_7,
+                 'form_2': function_9, 'form_3': function_11,
+                 'form_4': function_12, 'p_h_span_1': function_6, 'p_h_span_2': function_14, 'body': function_13,
+                 'img_svg': function_15}
+function_list = [function_3, function_4, function_5, function_6, function_7, function_9, function_10]
+function_list_names = []
+function_list_dictionary = {
+    'a_href_1': random.choice(['function_1', 'function_3', 'function_5', 'function_8', 'function_10']),
+    'a_href_2': 'function_4', 'form_1': 'function_7', 'form_2': 'function_9', 'form_3': 'function_11',
+    'form_4': 'function_12', 'p_h_span_1': 'function_6', 'p_h_span_2': 'function_14', 'body': 'function_13',
+    'img_svg': 'function_15'}
 
 file_name = "legitimate_file.html"
 target_file_name = file_name
@@ -1176,12 +1182,11 @@ def generate_final_html(selected_features):
         final_html += f"<li>{feature}</li>"
     final_html += "</ul>"
 
-
     '''
     Now the selected user features need to be called
     '''
     # print(function_list)
-    write_file = "PATH_TO_SAVE_LEGITIMATE_FILE"
+    write_file = "E:\\PhishOracle_Experiment_Complete\\PhishOracle_Web_App\\"
     write_file_name = os.path.join(write_file, str(target_file_name))
 
     function_2(target_file_name)
