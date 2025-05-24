@@ -61,3 +61,20 @@ pip install flask beautifulsoup4 pillow cairosvg numpy
 
 # Run the app
 python app.py
+```
+
+
+---
+
+## 📄 Citation
+
+If you find our work valuable or insightful for your research, we would greatly appreciate it if you consider citing our paper:
+- 📄 [arXiv preprint](https://arxiv.org/pdf/2407.20361)
+
+```bibtex
+@article{kulkarni2024ml,
+  title={From ml to llm: Evaluating the robustness of phishing webpage detection models against adversarial attacks},
+  author={Kulkarni, Aditya and Balachandran, Vivek and Divakaran, Dinil Mon and Das, Tamal},
+  journal={arXiv preprint arXiv:2407.20361},
+  year={2024}
+}
