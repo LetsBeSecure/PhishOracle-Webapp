@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><title>Step 2: Select Features</title></head>
+<body>
+    <h1>Select Features to Add</h1>
+    <form action="/generate" method="post">
+      <input type="hidden" name="webpage_dir" value="{{ webpage_dir }}">
+      <p>Select features to add:</p>
+      {% for f in features %}
+        <label><input type="checkbox" name="selected_features" value="{{ f }}"> {{ f }}</label><br>
+      {% endfor %}
+      <input type="submit" value="Generate Phishing Webpage">
+    </form>
+</body>
+</html>
